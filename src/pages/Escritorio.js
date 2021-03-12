@@ -1,20 +1,25 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Row, Col, Typography, Button, Divider} from 'antd'
 import { CloseCircleOutlined, RightOutlined } from '@ant-design/icons'
 import { getUsuarioStorage } from '../helpers/getUsuarioStorage'
 import { Redirect, useHistory } from 'react-router'
+import { SocketContext } from '../context/SocketContext'
 
 
 const {Title, Text} = Typography
 export const Escritorio = () => {
     const [usuario] = useState(getUsuarioStorage());
     const history = useHistory();
+    const {socket} = useContext(SocketContext);
+    const [ticket, setTicket] = useState(null);
     const salir = () =>{
         localStorage.clear();
         history.replace('/ingresar');
     } 
     const siguienteTicket = () =>{
-        console.log('sivuiente ticket');
+        socket.emit ('siguiente-ticket-trabajar', usuario, (ticket)=>{
+            setTicket(ticket);
+        })
     } 
     if (!usuario.agente || !usuario.escritorio) {
         return <Redirect to="/ingresar"/>
@@ -25,7 +30,7 @@ export const Escritorio = () => {
                 <Col span={20}>
                         <Title level={2}> {usuario.agente}</Title>
                         <Text>Usted está trabajando en el escritorio:</Text>
-                        <Text type="success">{usuario.escritorio}</Text>
+                        <Text type="success"> {usuario.escritorio}</Text>
                 </Col>
                 <Col span={4} align="right">
                     <Button
@@ -39,19 +44,25 @@ export const Escritorio = () => {
                 </Col>
             </Row>
             <Divider/>
-            <Row>
-                <Col>
-                    <Text>
-                        Está antendiendo el ticket número:
-                    </Text>
-                    <Text
-                        style={{fontSize:30}}
-                        type="danger"
-                    >
+            {
+                ticket &&
+                (
+                    <Row>
+                        <Col>
+                            <Text>
+                                Está antendiendo el ticket número: 
+                            </Text>
+                            <Text
+                                style={{fontSize:30}}
+                                type="danger"
+                            >
+                                { ticket.numero}
+                            </Text>
+                        </Col>
+                    </Row>
+                )
+            }
 
-                    </Text>
-                </Col>
-            </Row>
             <Row>
                 <Col offset={18} spoan={6} align="right">
                     <Button
