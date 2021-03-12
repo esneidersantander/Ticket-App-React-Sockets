@@ -2,6 +2,7 @@ import React from 'react'
 import { Form, Input, Button, InputNumber, Typography, Divider } from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
 import { useHistory } from 'react-router';
+import { useHideMenu } from '../hooks/useHideMenu';
 const layout = {
     labelCol: {
         span: 8,
@@ -20,6 +21,9 @@ const tailLayout = {
 const {Title, Text} = Typography;
 
 export const Ingresar = () => {
+
+    useHideMenu(false);
+
     const history = useHistory();
 
     const onFinish = (values) => {

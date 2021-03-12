@@ -15,11 +15,15 @@ import { Ingresar } from './Ingresar';
 import { Cola } from './Cola';
 import { CrearTicket } from './CrearTicket';
 import { Escritorio } from './Escritorio';
+import { UIContext } from '../context/UIContext';
+import { useContext } from 'react';
 
 
 const { Sider, Content } = Layout;
 
 export const RouterPage = () => {
+
+    const {ocultarMenu} = useContext(UIContext)
     return (
         <Router>
 
@@ -27,6 +31,7 @@ export const RouterPage = () => {
                 <Sider 
                     collapsedWidth="0" 
                     breakpoint="md"
+                    hidden={ocultarMenu}
                 >
                     <div className="logo" />
                     <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
